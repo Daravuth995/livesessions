@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Class Portal - ID Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --error: #ef4444;
+      --pink-glow: #ec4899;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f5ff, #e0e7ff, #f0fdf4);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--dark);
+      animation: bgPulse 15s ease infinite;
+      background-size: 200% 200%;
+    }
+
+    .container {
+      max-width: 900px;
+      padding: 2rem;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(270deg, #ff6ec4, #7873f5, #66ffff, #ff8a65);
+      background-size: 600% 600%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+      animation: animateGradient 8s ease infinite;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, #7873f5, #ec4899);
+      border-radius: 3px;
+      animation: pulseLine 2s ease infinite;
+    }
+
+    .instructor {
+      text-align: center;
+      color: var(--gray);
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .instructor:hover {
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .clock {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      transition: all 0.4s;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .clock:hover {
+      color: var(--pink-glow);
+      text-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(236, 72, 153, 0.2);
+    }
+
+    .notice {
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0 2rem;
+      text-align: center;
+      border-left: 4px solid var(--primary);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .notice:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+      border-left: 4px solid var(--pink-glow);
+    }
+
+    .sessions {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .session {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 250px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      text-align: center;
+      animation: floatButton 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .session::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #4f46e5, #ec4899);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .session:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 15px 35px rgba(236, 72, 153, 0.4);
+      color: white;
+    }
+
+    .session:hover::before {
+      opacity: 1;
+    }
+
+    .session:hover h2 {
+      color: white;
+    }
+
+    .session:hover .time {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .session:hover .meet-id {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    .session:active {
+      box-shadow: 0 0 30px 8px var(--pink-glow);
+      transform: scale(0.97);
+    }
+
+    .session h2 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .time {
+      color: var(--gray);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .meet-id {
+      background: #eef2ff;
+      color: var(--primary);
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: inline-block;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .coming-soon {
+      position: relative;
+      opacity: 0.8;
+    }
+
+    .coming-soon::after {
+      content: 'Coming Soon';
+      position: absolute;
+      top: 10px;
+      right: -25px;
+      background: #c7d2fe;
+      color: var(--dark);
+      padding: 0.2rem 1rem;
+      font-size: 0.7rem;
+      transform: rotate(45deg);
+      font-weight: 600;
+      animation: flashTag 1.5s infinite ease-in-out;
+      z-index: 3;
+    }
+
+    .access-denied {
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    @keyframes flashTag {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @keyframes animateGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatButton {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulseLine {
+      0%, 100% { width: 100px; opacity: 1; }
+      50% { width: 150px; opacity: 0.8; }
+    }
+
+    @keyframes bgPulse {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transform: scale(0.9);
+      animation: modalOpen 0.3s ease forwards;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: var(--error);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .modal-message {
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .success {
+      color: var(--success);
+    }
+
+    .error {
+      color: var(--error);
+    }
+
+    .id-input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .id-input:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+
+    .submit-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      font-weight: 600;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    @keyframes modalOpen {
+      to { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Class Portal - ID Access</h1>
+    <div class="instructor">Instructor: Daravuth Yon</div>
+    <div class="clock" id="clock">Loading time...</div>
+
+    <div class="notice">
+      Meeting ID: <strong>ofq-qvia-fmb</strong> | Approved student IDs only
+    </div>
+
+    <div class="sessions">
+      <div class="session" onclick="verifyAccess()">
+        <h2>Evening Session</h2>
+        <span class="time">7:00 PM - 8:00 PM</span>
+        <div class="meet-id">ofq-qvia-fmb</div>
+      </div>
+
+      <div class="session" onclick="verifyAccess()">
+        <h2>Night Session</h2>
+        <span class="time">9:00 PM - 10:00 PM</span>
+        <div class="meet-id">ofq-qvia-fmb</div>
+      </div>
+
+      <div class="session coming-soon" onclick="verifyAccess()">
+        <h2>Special Session</h2>
+        <span class="time">Time TBD</span>
+        <div class="meet-id">ofq-qvia-fmb</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for ID verification -->
+  <div class="modal" id="accessModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-icon" id="modalIcon"></div>
+      <h2 class="modal-title" id="modalTitle">Verify Your ID</h2>
+      <p class="modal-message" id="modalMessage">Please enter your student ID to access the class materials.</p>
+      <input type="text" class="id-input" id="studentIdInput" placeholder="Enter Student ID (e.g., stu001)">
+      <button class="submit-btn" onclick="checkAccess()">Verify ID</button>
+    </div>
+  </div>
+
+  <script>
+    // List of approved student IDs
+    const APPROVED_IDS = [
+      "stu001", "stu002", "stu003", "stu004", "stu005",
+      "stu006", "stu007", "stu008", "stu009", "stu010",
+      "stu011", "stu012", "stu013", "stu014", "stu015",
+      "stu016", "stu017", "stu018", "stu019", "stu020",
+      "stu021", "stu022", "stu023", "stu024", "stu025",
+      "stu026", "stu027", "stu028", "stu029", "stu030",
+      "stu031"
+    ];
+
+    // Open the verification modal
+    function verifyAccess() {
+      const modal = document.getElementById('accessModal');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const studentIdInput = document.getElementById('studentIdInput');
+      
+      // Reset modal state
+      modalIcon.innerHTML = '🔒';
+      modalIcon.className = 'modal-icon';
+      modalTitle.textContent = 'Verify Your ID';
+      modalMessage.textContent = 'Please enter your student ID to access the class materials.';
+      studentIdInput.value = '';
+      
+      modal.style.display = 'flex';
+      studentIdInput.focus();
+    }
+
+    // Close the modal
+    function closeModal() {
+      document.getElementById('accessModal').style.display = 'none';
+    }
+
+    // Check if ID is approved
+    function checkAccess() {
+      const inputID = document.getElementById('studentIdInput').value.trim().toLowerCase();
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      
+      if (!inputID) {
+        // Shake animation for empty input
+        const input = document.getElementById('studentIdInput');
+        input.classList.add('access-denied');
+        setTimeout(() => {
+          input.classList.remove('access-denied');
+        }, 500);
+        return;
+      }
+      
+      if (APPROVED_IDS.includes(inputID)) {
+        // Access granted
+        modalIcon.innerHTML = '✓';
+        modalIcon.className = 'modal-icon success';
+        modalTitle.textContent = 'Access Granted!';
+        modalMessage.textContent = `Welcome, ${inputID.toUpperCase()}! Redirecting to class...`;
+        
+        // Simulate redirection (in a real app, you would redirect here)
+        setTimeout(() => {
+          closeModal();
+          alert(`Access granted to ${inputID.toUpperCase()}. In a real application, you would be redirected to the class now.`);
+        }, 2000);
+      } else {
+        // Access denied
+        modalIcon.innerHTML = '✗';
+        modalIcon.className = 'modal-icon error';
+        modalTitle.textContent = 'Access Denied';
+        modalMessage.textContent = 'Your student ID is not recognized. Please try again or contact the instructor.';
+        
+        // Shake animation for denied access
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.classList.add('access-denied');
+        setTimeout(() => {
+          modalContent.classList.remove('access-denied');
+        }, 500);
+      }
+    }
+
+    // Allow pressing Enter in the input field
+    document.getElementById('studentIdInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkAccess();
+      }
+    });
+
+    // Live Clock for GMT+7
+    function updateClock() {
+      const now = new Date();
+      const utcOffset = 7 * 60; // GMT+7
+      const localTime = new Date(now.getTime() + (utcOffset + now.getTimezoneOffset()) * 60000);
+
+      const hours = localTime.getHours().toString().padStart(2, '0');
+      const minutes = localTime.getMinutes().toString().padStart(2, '0');
+      const seconds = localTime.getSeconds().toString().padStart(2, '0');
+
+      const clockEl = document.getElementById("clock");
+      clockEl.textContent = `Local Time (UTC+7): ${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
